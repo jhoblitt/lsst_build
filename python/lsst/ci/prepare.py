@@ -317,6 +317,7 @@ class ProductFetcher(object):
                 try:
                     Git.clone(*args, return_status=False)
                 except GitError as e:
+                    print('<<<HERE>>>', file=self.out)
                     print(e, file=self.out)
                     break
             else:
