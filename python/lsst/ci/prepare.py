@@ -24,7 +24,7 @@ import copy
 
 from . import tsort
 
-from .git import Git
+from .git import Git, GitError
 from future.utils import with_metaclass
 
 
@@ -313,8 +313,12 @@ class ProductFetcher(object):
                     args += ['-c', ('credential.helper=%s' % helper)]
 
                 args += [url, productdir]
-                if not Git.clone(*args, return_status=True)[1]:
-                        break
+
+                try:
+                    Git.clone(*args, return_status=False)
+                except GitError as e:
+                    print(e, file=self.out)
+                    break
             else:
                 raise Exception("Failed to clone product '%s' from any of the offered repositories" % product)
 
